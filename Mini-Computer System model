@@ -1,0 +1,109 @@
+#include<iostream>
+using namespace std;
+
+class Processor{
+	
+   private:
+   	     
+	     string manufacturer;
+	     float speed;
+	
+	public:
+		 Processor(){}
+		 
+		 Processor(string a,float b)
+		 {
+		 	 manufacturer=a;
+	          speed=b;
+		 	 }
+        
+		void getProcessor(){
+			
+			cout<<"Manufacturer: "<<manufacturer<<endl;
+			cout<<"speed: "<<speed<<endl;
+		}
+			
+	
+};
+
+class Memory
+{
+	private:
+		    int capacity;
+		    string type;
+		    
+	public:
+		   
+		   Memory(){}
+		   
+		Memory(int x,string y)
+		{
+			capacity=x;
+			type=y;
+		}
+	
+	 void memoryInfo()
+	 {
+	    cout<<"Memory capacity: "<<capacity<<"GB"<<endl;
+	    cout<<"Memory Type: "<<type<<endl;	
+	 }	
+};
+
+class Storage
+{
+	private: 
+	       int capacity;
+	       string type;
+	       
+	public:
+		  Storage(){}
+		  
+		  Storage(int c,string d)
+		  {
+		  	 capacity=c;
+	           type=d;
+		  	
+		  }
+	 
+	 void StorageInfo()
+	 {
+	 	cout<<"Storage Capacity: "<<capacity<<"GB"<<endl;
+	 	cout<<"Storage Type: "<<type<<endl;
+	 }	
+};
+
+
+class Computer
+{
+	private:
+		  Processor  po;
+		  Memory mo;
+		  Storage so;
+		  
+	public:
+		 Computer(){}
+		 
+		 Computer(string a,float b,int x,string y,int c,string d)
+		 {
+		   po=Processor(a,b);
+		   mo=Memory(x,y);
+		   so=Storage(c,d);
+		 	
+		 }
+	
+	void DisplaySpecs()
+	{
+		po.getProcessor();
+		mo.memoryInfo();
+		so.StorageInfo();
+	}
+	
+};
+
+int main()
+{
+	Computer c1("Ryzen",3.60,32,"RAM",1000,"Hard disk" );
+	c1.DisplaySpecs();
+	
+	return 0;
+}
