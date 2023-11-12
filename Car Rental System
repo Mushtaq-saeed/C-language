@@ -1,0 +1,314 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Car {
+private:
+    string make;
+    string model;
+    int year;
+    bool available;
+    double rentalRate;
+
+public:
+	Car()
+	{
+	}
+    Car(string& make,string& model, int year, double rentalRate)
+        : make(make), model(model), year(year), rentalRate(rentalRate), available(true) {}
+
+    string& getMake() {
+        return make;
+    }
+
+    string& getModel() {
+        return model;
+    }
+
+    int getYear() {
+        return year;
+    }
+
+    bool isAvailable() {
+        return available;
+    }
+
+    double getRentalRate() {
+        return rentalRate;
+    }
+
+    void rentCar() {
+        if (available) {
+            available = false;
+            cout << "Car rented successfully!" << endl;
+        } else {
+            cout << "Car is not available for rent." << endl;
+        }
+    }
+
+    void returnCar() {
+        if (!available) {
+            available = true;
+            cout << "Car returned successfully!" << endl;
+        } else {
+            cout << "Car is already available." << endl;
+        }
+    }
+};
+
+class Customer {
+private:
+    string name;
+    string contactInfo;
+
+public:
+	Customer()
+	{
+		
+	}
+    Customer(string& name,string& contactInfo)
+        : name(name), contactInfo(contactInfo) {}
+
+    string& getName() {
+        return name;
+    }
+
+    string& getContactInfo(){
+        return contactInfo;
+    }
+};
+
+class RentalSystem {
+private:
+    Car cars[10];
+    int carCount;
+    Customer customers[10];
+    int customerCount;
+
+public:
+    RentalSystem()
+	{
+		 carCount = 0; 
+		 customerCount = 0;
+	}
+
+    void addCar(Car& car) {
+        if (carCount < 10) {
+            cars[carCount++] = car;
+            cout << "Car added successfully!" << endl;
+        } else {
+            cout << "Cannot add more cars. Car inventory is full." << endl;
+        }
+    }
+
+    void addCustomer(Customer& customer) {
+        if (customerCount < 10) {
+            customers[customerCount++] = customer;
+            cout << "Customer added successfully!" << endl;
+        } else {
+            cout << "Cannot add more customers. Customer database is full." << endl;
+        }
+    }
+
+    void rentCar(string& make,string& model,string& customerName) {
+        Car* car = findCar(make, model);
+        if (car != NULL) {
+            if (car->isAvailable()) {
+                Customer* customer = findCustomer(customerName);
+                if (customer != NULL) {
+                    car->rentCar();
+                    cout << "Rental details - Car: " << car->getMake() << " " << car->getModel()
+                         << ", Customer: " << customer->getName() << endl;
+                } else {
+                    cout << "Customer not found." << endl;
+                }
+            } else {
+                cout << "Car is not available for rent." << endl;
+            }
+        } else {
+            cout << "Car not found." << endl;
+        }
+    }
+
+    void returnCar(string& make,string& model) {
+        Car* car = findCar(make, model);
+        if (car != NULL) {
+            if (!car->isAvailable()) {
+                car->returnCar();
+                cout << "Car: " << car->getMake() << " " << car->getModel()
+                     << " returned successfully." << endl;
+            } else {
+                cout << "Car is already available." << endl;
+            }
+        } else {
+            cout << "Car not found." << endl;
+        }
+    }
+
+    void displayCarAvailability(){
+        cout << "Car Availability:" << endl;
+        for (int i = 0; i < carCount; i++) {
+            Car& car = cars[i];
+            cout << car.getMake() << " " << car.getModel() << ": "
+                 << (car.isAvailable() ? "Available" : "Not Available") << endl;
+        }
+    }
+
+    void displayRentalReports(){
+        cout << "Rental Reports:" << endl;
+        cout << "----------------" << endl;
+        cout << "Rented Cars:" << endl;
+        bool hasRentedCars = false;
+        for (int i = 0; i < carCount; i++) {
+            Car& car = cars[i];
+            if (!car.isAvailable()) {
+                cout << car.getMake() << " " << car.getModel() << endl;
+                hasRentedCars = true;
+            }
+        }
+        if (!hasRentedCars) {
+            cout << "No rented cars." << endl;
+        }
+        cout << "Customer Rental History:" << endl;
+        bool hasRentalHistory = false;
+        for (int i = 0; i < customerCount; i++) {
+            Customer& customer = customers[i];
+            cout << "Customer: " << customer.getName() << endl;
+            bool hasCustomerRentalHistory = false;
+            for (int j = 0; j < carCount; j++) {
+                Car& car = cars[j];
+                if (!car.isAvailable()) {
+                    cout << "- " << car.getMake() << " " << car.getModel() << endl;
+                    hasCustomerRentalHistory = true;
+                }
+            }
+            if (!hasCustomerRentalHistory) {
+                cout << "- No rental history." << endl;
+            } else {
+                hasRentalHistory = true;
+            }
+        }
+        if (!hasRentalHistory) {
+            cout << "No rental history available." << endl;
+        }
+    }
+
+private:
+    Car* findCar(string& make,string& model) {
+        for (int i = 0; i < carCount; i++) {
+            Car& car = cars[i];
+            if (car.getMake() == make && car.getModel() == model) {
+                return &car;
+            }
+        }
+        return NULL;
+    }
+
+    Customer* findCustomer(string& name) {
+        for (int i = 0; i < customerCount; i++) {
+            Customer& customer = customers[i];
+            if (customer.getName() == name) {
+                return &customer;
+            }
+        }
+        return NULL;
+    }
+};
+
+int main() {
+     RentalSystem rentalSystem;
+
+    while (true) {
+        cout << "******* Car Rental System ******" << endl;
+        cout << "1. Add Car" << endl;
+        cout << "2. Add Customer" << endl;
+        cout << "3. Rent a Car" << endl;
+        cout << "4. Return a Car" << endl;
+        cout << "5. Available cars status" << endl;
+        cout << "6. Rental Reports" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
+        
+        int choice;
+        cin >> choice;
+        cin.ignore(); 
+        
+        switch (choice) {
+            case 1: {
+                string make, model;
+                int year;
+                double rentalRate;
+                
+                cout << "Car make: ";
+                getline(cin, make);
+                cout << "Car model: ";
+                getline(cin, model);
+                cout << "Car year: ";
+                cin >> year;
+                cout << "Rental rate: ";
+                cin >> rentalRate;
+                if(rentalRate < 1)
+                {
+                	cout<<"Rental rate must be at least 1 pkr!";
+                	break;
+				}
+                Car car(make, model, year, rentalRate);
+                rentalSystem.addCar(car);
+                break;
+            }
+            case 2: {
+                string name, contactInfo;
+                cout << "Customer name: ";
+                getline(cin, name);
+                cout << "Customer contact information: ";
+                getline(cin, contactInfo);
+                Customer customer(name, contactInfo);
+                rentalSystem.addCustomer(customer);
+                break;
+            }
+            case 3: {
+                string make, model, customerName;
+                cout << "Car make: ";
+                getline(cin, make);
+                cout << "Car model: ";
+                getline(cin, model);
+                cout << "Customer name: ";
+                getline(cin, customerName);
+                
+                rentalSystem.rentCar(make, model, customerName);
+                break;
+            }
+            case 4: {
+                string make, model;
+                
+                cout << "Car make: ";
+                getline(cin, make);
+                cout << "Car model: ";
+                getline(cin, model);
+                
+                rentalSystem.returnCar(make, model);
+                break;
+            }
+            case 5: 
+			{
+                rentalSystem.displayCarAvailability();
+                break;
+            }
+            case 6: {
+                rentalSystem.displayRentalReports();
+                break;
+            }
+            case 0: {
+                cout << "Exiting!" << endl;
+                return 0;
+            }
+            default: {
+                cout << "Invalid Option." << endl;
+                break;
+            }
+        }
+        cout << endl;
+    }
+    return 0;
+}
