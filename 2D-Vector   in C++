@@ -1,0 +1,38 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main()
+ {
+
+    int size,q;
+    cin >> size >>q;
+    vector<vector<int >> a(size);
+    
+    for(int i=0; i<size; i++)
+    {
+        int j_size;
+        cin >> j_size;
+        vector< int> temp(j_size);
+        
+        for(int j=0 ; j< j_size ; j++)
+        {
+            cin >>  temp[j] ;
+        }
+        a[i] = temp;
+    }
+    
+    for(int z=0;  z< q; z++)
+    {
+        int i,j;
+        cin  >> i >> j;
+        cout << a[i][j]  <<endl;
+    }
+         
+    return 0;
+}
+
