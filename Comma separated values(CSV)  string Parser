@@ -15,15 +15,16 @@ vector<int> parseInts(string str)
     while(ss >> no )
     {
 
-            number.push_back(no);
+            numbers.push_back(no);
         
         
         if (ss.peek() == ',')
         {
-            ss.ignore();
+            ss.ignore(); 
+        }
     }
     
-    return number;
+    return numbers;
 }
 
 int main() {
